@@ -17,7 +17,7 @@ const App = () => {
         <div className='px-4 bg-white rounded-md'>
           <article className='flex gap-4 px-4 py-4 border-b-gray-400'>
             <button className='inline-block w-5 h-5 border-2 rounded-full'></button>
-            <p className='text-gray-600 grow'>Complete online javascript course in bluuweb</p>
+            <p className='text-gray-600 grow'>Complete online javascript course in bluuwebs</p>
             <button>
               <CrossIcon />
             </button>
