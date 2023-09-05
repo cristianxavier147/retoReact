@@ -1,56 +1,71 @@
-import CrossIcon from './components/icons/CrossIcon';
+import { useState } from 'react';
+import Header from './components/Header';
+import TodoCreate from './components/TodoCreate';
+import TodoList from './components/TodoList';
+import TodoComputed from './components/TodoComputed';
+import TodoFilter from './components/TodoFilter';
+
+const initialState = [
+  {
+    id: 1,
+    title: 'Learn React',
+    completed: true,
+  },
+  {
+    id: 2,
+    title: 'Learn Vue',
+    completed: false,
+  },
+  {
+    id: 3,
+    title: 'Learn Svelte',
+    completed: false,
+  },
+  {
+    id: 4,
+    title: 'Learn Query',
+    completed: true,
+  },
+];
 
 const App = () => {
+  const [todos, setTodos] = useState(initialState);
+
+  const createTodo = (title) => {
+    const newTodo = {
+      id: Date.now(),
+      title,
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+  };
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const updateTodo = (id) => {
+    setTodos(todos.map((todo) => (todo.id === id ? { ...todo, completed: !todo.completed } : todo)));
+  };
+
+  const todoLeft = todos.filter((todo) => !todo.completed).length;
+
+  const clearCompleted = () => {
+    setTodos(todos.filter((todo) => !todo.completed));
+  };
+
   return (
     <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-contain bg-no-repeat bg-gray-300 min-h-screen">
-      <header className='container px-4 pt-8 mx-auto'>
-        <div className='flex justify-between'>
-          <h1 className='text-3xl font-bold tracking-[0.3em] text-white uppercase'>Todo</h1>
-          <button>luna</button>
-        </div>
-        <form className='flex items-center gap-4 px-4 py-4 mt-8 overflow-hidden bg-white rounded-md'>
-          <span className='inline-block w-5 h-5 border-2 rounded-full'></span>
-          <input className='w-full p-4 text-gray-400 outline-none' type='text' placeholder='Create a new todo...' />
-        </form>
-      </header>
+      <Header />
       <main className='container px-4 mx-auto mt-8'>
-        <div className='px-4 bg-white rounded-md'>
-          <article className='flex gap-4 px-4 py-4 border-b-gray-400'>
-            <button className='inline-block w-5 h-5 border-2 rounded-full'></button>
-            <p className='text-gray-600 grow'>Complete online javascript course in bluuwebs</p>
-            <button>
-              <CrossIcon />
-            </button>
-          </article>
-          <article className='flex items-center justify-between p-4 border-b-2'>
-            <button className='inline-block w-5 h-5 border-2 rounded-full'></button>
-            <p className='text-gray-600'>Complete online javascript course in bluuweb</p>
-            <button>
-              <CrossIcon />
-            </button>
-          </article>
-          <article className='flex items-center justify-between p-4 border-b-2'>
-            <button className='inline-block w-5 h-5 border-2 rounded-full'></button>
-            <p className='text-gray-600'>Complete online javascript course in bluuweb</p>
-            <button>
-              <CrossIcon />
-            </button>
-          </article>
-        </div>
-
-        <section>
-          <span>5 items left</span>
-          <button>Clear completed</button>
-        </section>
+        <TodoCreate createTodo={createTodo} />
+        <TodoList todos={todos} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+        <TodoComputed todoLeft={todoLeft} clearCompleted={clearCompleted} />
+        <TodoFilter />
       </main>
 
-      <section className='container px-4 mx-auto'>
-        <button>All</button>
-        <button>Active</button>
-        <button>Completed</button>
-      </section>
-
-      <p className='text-center'>Drag and drop to reorder list</p>
+      <footer className='mt-8 text-center'>Drag and drop to reorder list</footer>
     </div>
   );
 };
